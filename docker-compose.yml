@@ -12,7 +12,7 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: /bin/sh start.sh
     volumes:
       - .:/code
     ports:
