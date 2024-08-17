@@ -7,8 +7,8 @@ services:
     restart: always
     env_file:
       - ./postgres/.env
-    expose:
-      - "5432"
+    networks:
+      - mysite_network
 
   web:
     build: .
@@ -19,6 +19,8 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+    networks:
+      - mysite_network
 
   nginx:
     image: nginx:latest
@@ -29,7 +31,13 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - web
+    networks:
+      - mysite_network
 
 volumes:
   postgres_data:
     name: "mysite_postgres_data"
+
+networks:
+  mysite_network:
+    driver: bridge
