@@ -54,8 +54,7 @@ ROOT_URLCONF = 'PureBlog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,3 +154,20 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # mdeditor上传图片所需要
+
+# 日志配置
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # 设置为 'DEBUG' 以记录所有级别的日志
+        },
+    },
+}
