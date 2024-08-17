@@ -27,7 +27,7 @@ COPY . .
 ENV DJANGO_SETTINGS_MODULE=PureBlog.settings
 
 # 运行 Django 的迁移
-# RUN python manage.py migrate
+RUN python manage.py migrate
 
 # 收集静态文件
-# RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
