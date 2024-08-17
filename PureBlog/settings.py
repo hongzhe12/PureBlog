@@ -73,13 +73,26 @@ WSGI_APPLICATION = 'PureBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'django_db',  # 数据库名称
+            'USER': 'django_user',  # 数据库用户
+            'PASSWORD': 'django_password',  # 数据库密码
+            'HOST': 'db',  # 数据库服务的主机名
+            'PORT': '3306',  # MySQL 默认端口是 3306，这里可以省略
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -107,12 +120,11 @@ TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True  # 启用国际化
 USE_L10N = True  # 启用本地化（日期、数字格式等）
-USE_TZ = True    # 启用时区支持
+USE_TZ = True  # 启用时区支持
 
 DATE_FORMAT = 'Y-m-d'
 DATETIME_FORMAT = 'Y-m-d H:i:s'
 TIME_FORMAT = 'H:i:s'
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -139,6 +151,5 @@ if DEBUG:
 else:
     # 生产模式下文件服务配置
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # mdeditor上传图片所需要
