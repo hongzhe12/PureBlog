@@ -88,7 +88,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'django_db',  # 数据库名称
             'USER': 'django_user',  # 数据库用户
-            'PASSWORD': 'django_password',  # 数据库密码
+            'PASSWORD': 'zkz3arz#5',  # 数据库密码
             'HOST': 'db',  # 数据库服务的主机名
             'PORT': '3306',  # MySQL 默认端口是 3306，这里可以省略
             "OPTIONS": {

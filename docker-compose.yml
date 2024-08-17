@@ -1,16 +1,16 @@
 services:
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: headlong123
       MYSQL_DATABASE: django_db
       MYSQL_USER: django_user
-      MYSQL_PASSWORD: django_password
+      MYSQL_PASSWORD: zkz3arz#5
     volumes:
       - db_data:/var/lib/mysql
-    expose:
-      - "3306"
+    ports:
+      - "3306:3306"
 
   web:
     build: .
