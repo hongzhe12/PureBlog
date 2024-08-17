@@ -1,16 +1,14 @@
 services:
-  db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: headlong123
-      MYSQL_DATABASE: django_db
-      MYSQL_USER: django_user
-      MYSQL_PASSWORD: zkz3arz#5
+  postgres:
+    image: postgres:13.14-bullseye
+    container_name: mysite-postgres
     volumes:
-      - db_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - mysite_network
+    env_file:
+      - ./postgres/.env
 
   web:
     build: .

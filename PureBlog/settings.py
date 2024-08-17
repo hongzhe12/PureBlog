@@ -85,16 +85,12 @@ if DEBUG:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'django_db',  # 数据库名称
-            'USER': 'django_user',  # 数据库用户
-            'PASSWORD': 'zkz3arz#5',  # 数据库密码
-            'HOST': 'db',  # 数据库服务的主机名
-            # 'PORT': '3306',  # MySQL 默认端口是 3306，这里可以省略
-            "OPTIONS": {
-                "charset": "utf8mb4",
-                "collation": "utf8mb4_unicode_ci",
-            },
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['DB_NAME'],
+            'HOST': os.environ['DB_HOST'],
+            'PORT': os.environ['DB_PORT'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['DB_PASSWORD']
         }
     }
 
