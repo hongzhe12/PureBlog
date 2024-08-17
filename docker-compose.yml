@@ -12,6 +12,7 @@ services:
 
 
   web:
+    container_name: mysite-django
     build: .
     command: /bin/sh start.sh
     volumes:
@@ -24,6 +25,7 @@ services:
       - mysite_network
 
   nginx:
+    container_name: mysite-nginx
     image: nginx:latest
     restart: always
     ports:
