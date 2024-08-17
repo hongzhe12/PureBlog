@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客首页</title>
+    <!-- 引入Bootstrap的CSS文件 -->
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'article:home' %}">首页</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'article:about' %}">关于</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'article:contact' %}">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- 文章列表 -->
+<main class="container mt-4">
+    <h1>最新文章</h1>
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a
+                                href="{% url 'article:article_detail' article.slug %}">{{ article.title }}</a></h5>
+                        <p class="card-text">{{ article.summary }}</p>
+                        <p class="card-text"><small class="text-muted">发表于 {{ article.published_date }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>暂无文章。</p>
+        {% endfor %}
+    </div>
+
+    <!-- 分页 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if articles.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; 第一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ articles.previous_page_number }}">上一页</a></li>
+            {% endif %}
+
+            <li class="page-item disabled"><span class="page-link">第 {{ articles.number }} 页，共 {{ articles.paginator.num_pages }} 页</span></li>
+
+            {% if articles.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ articles.next_page_number }}">下一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ articles.paginator.num_pages }}">最后一页 &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</main>
+
+<!-- 底部信息 -->
+<footer>
+    <p>&copy; 2024 我的博客. 保留所有权利。</p>
+</footer>
+
+<!-- 引入Bootstrap的JavaScript文件 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
