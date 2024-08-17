@@ -4,6 +4,21 @@ FROM python:3.9-slim
 # 设置工作目录
 WORKDIR /code
 
+# 安装必要的编译工具和库
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libreadline6-dev \
+    libmysqlclient-dev \
+    libbz2-dev \
+    liblzma-dev \
+    zlib1g-dev \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # 复制 requirements.txt
 COPY requirements.txt requirements.txt
 
