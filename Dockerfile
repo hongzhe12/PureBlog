@@ -5,13 +5,13 @@ FROM python:3.9-slim
 WORKDIR /code
 
 # 更新apt源并安装必要的系统包
-RUN apt-get update && \
-    apt-get install -y \
-        libmysqlclient-dev \
-        python3-dev \
-        libssl-dev \
-        libffi-dev && \
-    apt-get clean && \
+RUN apt-get update && \\
+    apt-get install -y --no-install-recommends \\
+        libmariadb-dev-compat \\  # Replaces libmysqlclient-dev
+        python3-dev \\
+        libssl-dev \\
+        libffi-dev && \\
+    apt-get clean && \\
     rm -rf /var/lib/apt/lists/*
 
 # 复制 requirements.txt
