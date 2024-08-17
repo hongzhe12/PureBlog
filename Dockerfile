@@ -7,10 +7,10 @@ WORKDIR /code
 # 更新APT源并安装必要的系统包
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        libmariadb-dev-compat \
         python3-dev \
-        libssl-dev \
-        libffi-dev && \
+        default-libmysqlclient-dev \
+        build-essential \
+        pkg-config && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
