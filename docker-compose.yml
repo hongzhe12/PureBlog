@@ -9,6 +9,8 @@ services:
       MYSQL_PASSWORD: django_password
     volumes:
       - db_data:/var/lib/mysql
+    expose:
+      - "3306"
 
   web:
     build: .
