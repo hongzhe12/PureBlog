@@ -25,7 +25,7 @@ docker load -i mysite-postgres.tar.gz
 # 常用命令
 ```bash
 docker exec -it -uroot mysite-django python manage.py collectstatic
-docker exec -it -uroot mysite-django ls /home/app/django/media
+docker exec -it -uroot mysite-django ls /code/static/blog/js
 ```
 
 # 拉取更新并重启
