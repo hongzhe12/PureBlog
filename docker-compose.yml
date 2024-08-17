@@ -37,8 +37,7 @@ services:
 
 volumes:
   postgres_data:
-    name: "mysite_postgres_data"
-    external: true
+    name: "postgres_data"
 
 networks:
   mysite_network:
