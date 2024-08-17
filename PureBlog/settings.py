@@ -90,13 +90,15 @@ else:
             'USER': 'django_user',  # 数据库用户
             'PASSWORD': 'zkz3arz#5',  # 数据库密码
             'HOST': 'db',  # 数据库服务的主机名
-            'PORT': '3306',  # MySQL 默认端口是 3306，这里可以省略
+            # 'PORT': '3306',  # MySQL 默认端口是 3306，这里可以省略
             "OPTIONS": {
                 "charset": "utf8mb4",
                 "collation": "utf8mb4_unicode_ci",
             },
         }
     }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
