@@ -33,4 +33,5 @@ services:
       - web
 
 volumes:
-  db_data:
+  postgres_data:
+    name: "mysite_postgres_data"
