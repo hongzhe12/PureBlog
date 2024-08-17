@@ -9,7 +9,7 @@ services:
       - ./postgres/.env
     networks:
       - mysite_network
-    external: true
+
 
   web:
     build: .
@@ -38,6 +38,7 @@ services:
 volumes:
   postgres_data:
     name: "mysite_postgres_data"
+    external: true
 
 networks:
   mysite_network:
