@@ -23,6 +23,8 @@ services:
       - postgres
     networks:
       - mysite_network
+    env_file:
+      - ./postgres/.env
 
   nginx:
     container_name: mysite-nginx

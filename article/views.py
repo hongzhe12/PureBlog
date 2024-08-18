@@ -1,5 +1,6 @@
 import markdown
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
 from .models import Article
@@ -25,6 +26,7 @@ def article_detail(request, slug):
                                          'markdown.extensions.extra',
                                          # 语法高亮扩展
                                          'markdown.extensions.codehilite',
+                                         'markdown.extensions.tables',
                                      ])
 
     context = {'article': article}
@@ -38,3 +40,7 @@ def about_view(request):
 
 def contact_view(request):
     return render(request, 'blog/contact.html')
+
+
+def error_view(request):
+    raise Http404("这是一个人为抛出的404错误")

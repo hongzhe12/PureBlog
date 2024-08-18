@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--jf5@)96zkz3arz#5(-^%t5cq-q0udrnxw!8dil5f!#%tdsbq%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -85,14 +85,13 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'dev',
-            'HOST': 'postgres',
-            'PORT': 5432,
-            'USER': 'dev',
-            'PASSWORD': 'Hhz520123'
+            'NAME': os.environ['DB_NAME'],
+            'HOST': os.environ['DB_HOST'],
+            'PORT': os.environ['DB_PORT'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['DB_PASSWORD']
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -153,21 +152,69 @@ else:
     # 生产模式下文件服务配置
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'  # mdeditor上传图片所需要
+# mdeditor配置
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 日志配置
+# 给ADMINS发送邮件需要配置
+ADMINS = (
+    ('宏哲', 'hongzhe2022@163.com'),
+)
+MANAGERS = ADMINS
+
+# 创建log文件的文件夹
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+
+# 基本配置，可以复用的
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,  # 禁用已经存在的logger实例
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {  # 定义了两种日志格式
+        "verbose": {  # 详细
+            "format": "%(levelname)s %(asctime)s %(module)s "
+                      "%(process)d %(thread)d %(message)s"
+        },
+        'simple': {  # 简单
+            'format': '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',  # 设置为 'DEBUG' 以记录所有级别的日志
+    "handlers": {  # 定义了三种日志处理方式
+        "mail_admins": {  # 只有debug=False且Error级别以上发邮件给admin
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        'file': {  # 对INFO级别以上信息以日志文件形式保存
+            'level': "INFO",
+            'class': 'logging.handlers.RotatingFileHandler',  # 滚动生成日志，切割
+            'filename': os.path.join(LOG_DIR, 'django.log'),  # 日志文件名
+            'maxBytes': 1024 * 1024 * 10,  # 单个日志文件最大为10M
+            'backupCount': 5,  # 日志备份文件最大数量
+            'formatter': 'simple',  # 简单格式
+            'encoding': 'utf-8',  # 放置中文乱码
+        },
+        "console": {  # 打印到终端console
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django.request": {  # Django的request发生error会自动记录
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,  # 向不向更高级别的logger传递
+        },
+        "django.security.DisallowedHost": {  # 对于不在 ALLOWED_HOSTS 中的请求不发送报错邮件
+            "level": "ERROR",
+            "handlers": ["console", "mail_admins"],
+            "propagate": True,
         },
     },
 }
