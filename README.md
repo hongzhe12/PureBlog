@@ -29,12 +29,21 @@ docker exec -it -uroot mysite-django ls /code/static/blog/js
 docker logs mysite-django # 查看容器日志
 docker exec -it -uroot mysite-django cat logs/django.log  # 查看django日志
 cat logs/django.log
+docker compose up --build web -d # 构建镜像并启动容器
+docker compose down # 停止并删除容器
+docker compose up -d # 启动容器
+docker compose restart # 重启容器
+docker compose logs # 查看容器日志
+docker compose exec web bash # 进入容器
+docker compose exec postgres psql -U dev -d dev # 进入postgres容器
+docker compose exec minio mc config host add myminio http://127.0.0.1:9000 minioadmin minioadmin # 配置minio
+docker compose exec minio mc ls myminio # 查看minio文件
 ```
 
 # 拉取更新并重启
 ```bash
 git pull origin master
-vim $(find ./ -name .env)
+vim $(find ./ -name .env) # Hhz520123
 docker compose down
 docker compose up -d
 ```
