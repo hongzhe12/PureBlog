@@ -12,3 +12,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
+
+
+admin.site.site_header = '博客管理后台'  # 设置header
+admin.site.site_title = '博客管理后台'   # 设置title
+admin.site.index_title = '博客管理后台'

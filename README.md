@@ -28,11 +28,13 @@ docker exec -it -uroot mysite-django python manage.py collectstatic
 docker exec -it -uroot mysite-django ls /code/static/blog/js
 docker logs mysite-django # 查看容器日志
 docker exec -it -uroot mysite-django cat logs/django.log  # 查看django日志
+cat logs/django.log
 ```
 
 # 拉取更新并重启
 ```bash
 git pull origin master
+vim $(find ./ -name .env)
 docker compose down
 docker compose up -d
 ```

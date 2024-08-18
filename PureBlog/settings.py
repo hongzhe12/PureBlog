@@ -22,13 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--jf5@)96zkz3arz#5(-^%t5cq-q0udrnxw!8dil5f!#%tdsbq%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'mdeditor',
     'article.apps.ArticleConfig',
     'django.contrib.admin',
@@ -218,3 +220,5 @@ LOGGING = {
         },
     },
 }
+
+SIMPLEUI_LOGO = 'http://127.0.0.1:8000/static/logo/logo.jpg'
