@@ -44,8 +44,10 @@ docker compose exec minio mc ls myminio # 查看minio文件
 ```bash
 git pull origin master
 vim $(find ./ -name .env) # Hhz520123
+sed -i 's/DEBUG = True/DEBUG = False/g' $(find ./ -name settings.py) # 修改为生产环境
 docker compose down
 docker compose up -d
+docker logs mysite-django # 查看容器日志
 ```
 
 # 导入样例数据
