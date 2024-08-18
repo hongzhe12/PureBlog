@@ -26,7 +26,8 @@ docker load -i mysite-postgres.tar.gz
 ```bash
 docker exec -it -uroot mysite-django python manage.py collectstatic
 docker exec -it -uroot mysite-django ls /code/static/blog/js
-docker logs mysite-django
+docker logs mysite-django # 查看容器日志
+docker exec -it -uroot mysite-django cat logs/django.log  # 查看django日志
 ```
 
 # 拉取更新并重启
