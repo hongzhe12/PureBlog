@@ -43,7 +43,7 @@ docker compose exec minio mc ls myminio # 查看minio文件
 # 拉取更新并重启
 ```bash
 git pull origin master
-vim $(find ./ -name .env) # Hhz520123
+vim $(find ./ -name .env) 
 sed -i 's/DEBUG = True/DEBUG = False/g' $(find ./ -name settings.py) # 修改为生产环境
 docker compose down
 docker compose up -d
