@@ -24,8 +24,8 @@ docker load -i mysite-postgres.tar.gz
 
 # 常用命令
 ```bash
-docker exec -it -uroot mysite-django python manage.py collectstatic
-docker exec -it -uroot mysite-django ls /code/static/blog/js
+docker exec -it -uroot mysite-django python manage.py collectstatic # 收集静态文件
+docker exec -it -uroot mysite-django ls /code/static/img # 检查静态文件是否存在
 docker logs mysite-django # 查看容器日志
 docker exec -it -uroot mysite-django cat logs/django.log  # 查看django日志
 cat logs/django.log
