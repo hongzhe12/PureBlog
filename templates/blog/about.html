@@ -54,19 +54,15 @@
 我熟练掌握Python语言，并且对C语言也有很好的掌握，此外还了解C++、Java和JavaScript等多种编程语言。
 我在技术社区也十分活跃，不仅在博客园分享各种编程题解，在CSDN上记录学习笔记和技术心得，还在GitHub上开源了我的个人项目。我热衷于探索新技术，享受解决问题的过程，并且性格开朗，热爱运动。
         </p>
-
-        <b><p>博客园：https://www.cnblogs.com/huanghongzhe</p></b>
-        <b><p>CSDN：https://blog.csdn.net/qq_17802895</p></b>
         <b><p>github：https://github.com/hongzhe12</p></b>
 
     </main>
 
-    <footer class="bg-light text-center py-4 mt-4">
-        <p>&copy; 2024 我的博客. 保留所有权利。</p>
-    </footer>
+     {% include "blog/footer.html" %}
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="{% static 'blog/js/jquery-3.5.1.slim.min.js' %}"></script>
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'bootstrap/4.5.3/js/bootstrap.min.js' %}"></script>
+
 </body>
 </html>

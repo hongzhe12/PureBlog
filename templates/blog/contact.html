@@ -47,16 +47,14 @@
     <main class="container mt-4">
         <h1>联系我</h1>
         <b><p>电子邮件：hongzhe2022@163.com</p></b>
-        <b><p>微信号：hongzheweixin</p></b>
         <b><p>QQ：2528104776</p></b>
+        <b>学习交流群：<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=HUl8a8TYmDhz0XxTbjuqJQz23taE-S7S&jump_from=webapi&authKey=QG35wsqgvoOb8ruYI0cbIiaiGmyeIb/98J0eyQbdwXMw5KUPc1YuhtypAZW22YxJ"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="python学习小组" title="python学习小组"></a></b>
     </main>
 
-    <footer class="bg-light text-center py-4 mt-4">
-        <p>&copy; 2024 我的博客. 保留所有权利。</p>
-    </footer>
+    {% include "blog/footer.html" %}
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="{% static 'blog/js/jquery-3.5.1.slim.min.js' %}"></script>
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'bootstrap/4.5.3/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
