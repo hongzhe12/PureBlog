@@ -221,4 +221,5 @@ LOGGING = {
     },
 }
 
-SIMPLEUI_LOGO = 'http://127.0.0.1:8000/static/logo/logo.jpg'
+SIMPLEUI_LOGO = 'https:/pythond.cn/static/logo/logo.jpg'
+CSRF_TRUSTED_ORIGINS = ['https://pythond.cn']
