@@ -222,4 +222,5 @@ LOGGING = {
 }
 
 SIMPLEUI_LOGO = 'https:/pythond.cn/static/logo/logo.jpg'
-CSRF_TRUSTED_ORIGINS = ['https://pythond.cn']
+ALLOWED_ORIGINS = ['http://*', 'https://*']
+CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
