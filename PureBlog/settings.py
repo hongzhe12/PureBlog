@@ -221,6 +221,6 @@ LOGGING = {
     },
 }
 
-SIMPLEUI_LOGO = 'https:/pythond.cn/static/logo/logo.jpg'
-ALLOWED_ORIGINS = ['http://*', 'https://*']
+SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
+ALLOWED_ORIGINS = ['http://*.pythond.cn', 'https://127.0.0.1','http://pythond.cn','http://127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
