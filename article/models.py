@@ -33,3 +33,4 @@ class Article(models.Model):
         if not self.slug:  # 如果slug为空，则设置默认值
             self.slug = generate_random_slug()
         super().save(*args, **kwargs)
+

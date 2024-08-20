@@ -42,7 +42,7 @@ docker compose exec minio mc ls myminio # 查看minio文件
 
 # 拉取更新并重启
 ```bash
-git pull origin master
+git checkout origin/master -- PureBlog/settings.py && git pull origin master # 放弃本地修改，并同步
 vim $(find ./ -name .env) 
 sed -i 's/DEBUG = True/DEBUG = False/g' $(find ./ -name settings.py) # 修改为生产环境
 docker compose down web

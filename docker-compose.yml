@@ -37,6 +37,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/certs:/etc/nginx/ssl
       - ./static:/code/static
+      - ./media:/code/media
     depends_on:
       - web
     networks:
