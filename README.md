@@ -100,6 +100,12 @@ pureblog/
 如果您有任何建议或想要贡献代码，请提交 Pull Request 或创建 Issue。
 
 ## 项目演示
-在线项目：[博客首页](https://pythond.cn)
+![QQ_1724520904109](https://github.com/user-attachments/assets/5eaa609b-268a-45d8-a005-ccff3afa8ab8)
+![QQ_1724521076008](https://github.com/user-attachments/assets/d8a5a834-777d-4230-9d6b-f5cb3861d481)
+
+
+<img src=https://github.com/user-attachments/assets/19796354-b8c4-4ee8-981c-38e0303ed096 width=50% height=50% /> 
+<img src=https://github.com/user-attachments/assets/296a6c24-d86b-4d34-a181-c5b6099e781b width=50% height=50% />
+
 ---
 
