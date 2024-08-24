@@ -49,6 +49,7 @@ PureBlog 是一个用 Django 框架开发的个人博客系统，它提供了一
    ```
 5. 创建数据库和应用迁移
    ```bash
+   python manage.py makemigrations
    python manage.py migrate
    ```
 6. 创建超级用户
