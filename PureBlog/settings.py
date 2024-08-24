@@ -159,9 +159,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 日志配置
-import logging
+import os
+from logging.handlers import TimedRotatingFileHandler
 
-# 创建log文件的文件夹
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
@@ -170,11 +170,15 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "file": {
+        "timed_rotating_file": {
             "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(LOG_DIR, 'django.log'),  # 日志文件名
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": os.path.join(LOG_DIR, 'django.log'),  # 主日志文件名
+            "when": "midnight",  # 每天午夜轮换
+            "interval": 1,  # 每1天轮换
+            "backupCount": 7,  # 保留的备份文件数量
             "formatter": "verbose",
+            "encoding": "utf-8",
         },
     },
     "formatters": {
@@ -189,17 +193,13 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["file"],
+            "handlers": ["timed_rotating_file"],
             "level": "DEBUG",
             "propagate": True,
         },
     },
 }
 
-# 使用 logging 模块的配置来创建 handler
-file_handler = logging.FileHandler(os.path.join(LOG_DIR, 'django.log'))
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(logging.Formatter('%(levelname)s %(asctime)s %(module)s %(message)s'))
 
 SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
 ALLOWED_ORIGINS = ['https://pythond.cn']
