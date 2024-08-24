@@ -1,3 +1,8 @@
 /article/migrations/*
 !/article/migrations/__init__.py
 .idea/*
+/nginx/certs/*
+postgres/.env（线上）
+db.sqlite3
+venv/*
+logs/django.log
