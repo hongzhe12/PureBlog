@@ -1,2 +1,2 @@
-*.js linguist-language=JavaScript
+*.js linguist-language=Python
 *.py linguist-language=Python
