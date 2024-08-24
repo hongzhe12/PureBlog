@@ -1,1 +1,3 @@
-/article/migrations/
+/article/migrations/*
+!/article/migrations/__init__.py
+.idea/*
