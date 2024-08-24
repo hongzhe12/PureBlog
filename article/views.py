@@ -12,7 +12,7 @@ def article_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = {'articles': page_obj, }
+    context = {'articles': page_obj, 'title': '文章首页'}
     return render(request, 'blog/article_list.html', context)
 
 
@@ -21,25 +21,31 @@ def article_detail(request, slug):
 
     # 将markdown语法渲染成html样式
     article.content = markdown.markdown(article.content,
-                                     extensions=[
-                                         # 包含 缩写、表格等常用扩展
-                                         'markdown.extensions.extra',
-                                         # 语法高亮扩展
-                                         'markdown.extensions.codehilite',
-                                         'markdown.extensions.tables',
-                                     ])
+                                        extensions=[
+                                            # 包含 缩写、表格等常用扩展
+                                            'markdown.extensions.extra',
+                                            # 语法高亮扩展
+                                            'markdown.extensions.codehilite',
+                                            'markdown.extensions.tables',
+                                        ])
 
-    context = {'article': article}
+    context = {'article': article, 'title': article.title}
 
     return render(request, 'blog/article_detail.html', context)
 
 
 def about_view(request):
-    return render(request, 'blog/about.html')
+    context = {
+        'title': '关于我',
+    }
+    return render(request, 'blog/about.html',context)
 
 
 def contact_view(request):
-    return render(request, 'blog/contact.html')
+    context = {
+        'title': '联系我',
+    }
+    return render(request, 'blog/contact.html',context)
 
 
 def error_view(request):
