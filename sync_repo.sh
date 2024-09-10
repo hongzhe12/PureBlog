@@ -13,7 +13,7 @@ else
     echo "Updating repository..."
     cd $LOCAL_DIR
     git fetch --all
-    git reset --hard origin/main
+    git reset --hard origin/master
     git clean -fd
 fi
 
