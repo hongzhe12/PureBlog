@@ -4,11 +4,11 @@ FROM python:3.9-slim
 # 设置工作目录
 WORKDIR /code
 
-# 更新APT源并安装必要的系统包
-RUN apt-get update && \
+# 替换APT源为国内源，加快下载速度
+RUN sed -i 's|http://deb.debian.org/debian|http://mirrors.aliyun.com/debian|g' /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         python3-dev \
-        default-libmysqlclient-dev \
         build-essential \
         pkg-config && \
     apt-get clean && \
@@ -25,4 +25,3 @@ COPY . .
 
 # 设置环境变量
 ENV DJANGO_SETTINGS_MODULE=PureBlog.settings
-
