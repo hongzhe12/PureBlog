@@ -205,3 +205,4 @@ SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
 ALLOWED_ORIGINS = ['https://pythond.cn']
 CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # 强制使用https协议
