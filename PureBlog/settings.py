@@ -38,15 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',  # 允许跨域
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # 允许跨域
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware', # 如果你的项目没有考虑到 csrf 网络攻击,可注释掉,否则会报错没有传递 csrf cookie
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -201,14 +199,11 @@ LOGGING = {
         },
     },
 }
-
+# 跨域的配置
 # SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
-ALLOWED_ORIGINS = ['https://pythond.cn']
+ALLOWED_ORIGINS = ['http://47.113.186.186:8000','http://47.113.186.186','http://127.0.0.1','http://127.0.0.1:8000'] # 允许跨域的源
 CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # 强制使用https协议
 
-# 跨域配置
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_HEADERS = ('*')
+

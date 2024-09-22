@@ -32,7 +32,7 @@ cat logs/django.log
 docker compose up --build web -d # 构建镜像并启动容器
 docker compose down # 停止并删除容器
 docker compose up -d # 启动容器
-docker compose restart # 重启容器
+docker compose restart web # 重启容器
 docker compose logs # 查看容器日志
 docker compose exec web bash # 进入容器
 docker compose exec postgres psql -U dev -d dev # 进入postgres容器
