@@ -160,22 +160,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 日志配置
 import os
-from logging.handlers import TimedRotatingFileHandler
 
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
 
+from logging.handlers import RotatingFileHandler
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "timed_rotating_file": {
+        "rotating_file": {
             "level": "INFO",
-            "class": "logging.handlers.TimedRotatingFileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": os.path.join(LOG_DIR, 'django.log'),  # 主日志文件名
-            "when": "midnight",  # 每天午夜轮换
-            "interval": 1,  # 每1天轮换
+            "maxBytes": 1024 * 1024 * 5,  # 最大文件大小为5MB
             "backupCount": 7,  # 保留的备份文件数量
             "formatter": "verbose",
             "encoding": "utf-8",
@@ -186,19 +186,16 @@ LOGGING = {
             "format": "{levelname} {asctime} {module} {message}",
             "style": "{",
         },
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
     },
     "loggers": {
         "django": {
-            "handlers": ["timed_rotating_file"],
+            "handlers": ["rotating_file"],
             "level": "DEBUG",
             "propagate": True,
         },
     },
 }
+
 # 跨域的配置
 # SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
 ALLOWED_ORIGINS = ['http://47.113.186.186:8000','http://47.113.186.186','http://127.0.0.1','http://127.0.0.1:8000'] # 允许跨域的源
