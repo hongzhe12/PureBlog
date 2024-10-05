@@ -9,6 +9,8 @@ services:
       - ./postgres/.env
     networks:
       - mysite_network
+    ports:
+      - "5432:5432"
 
 
   web:
