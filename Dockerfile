@@ -4,8 +4,10 @@ FROM python:3.9-slim
 # 设置工作目录
 WORKDIR /code
 
-# 替换APT源为国内源，加快下载速度
-RUN sed -i 's|http://deb.debian.org/debian|http://mirrors.aliyun.com/debian|g' /etc/apt/sources.list && \
+# 替换 APT 源为国内源，加快下载速度
+RUN echo "deb http://mirrors.aliyun.com/debian bullseye main" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/debian bullseye-updates main" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/debian-security bullseye-security main" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         python3-dev \
