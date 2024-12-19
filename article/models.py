@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from mdeditor.fields import MDTextField
+from mptt.models import MPTTModel, TreeForeignKey
+from django.contrib.auth.models import User
 
 
 def generate_random_slug():
@@ -33,4 +35,40 @@ class Article(models.Model):
         if not self.slug:  # 如果slug为空，则设置默认值
             self.slug = generate_random_slug()
         super().save(*args, **kwargs)
+
+
+class Comment(MPTTModel):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='文章'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='评论者'
+    )
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children',
+        verbose_name='父评论'
+    )
+    content = models.TextField(verbose_name='评论内容')
+    created_time = models.DateTimeField( verbose_name='创建时间',default=timezone.now)
+    is_active = models.BooleanField(default=True, verbose_name='是否可见')
+
+    class MPTTMeta:
+        order_insertion_by = ['created_time']
+
+    class Meta:
+        verbose_name = '评论'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return f'{self.user.username}: {self.content[:20]}'
 

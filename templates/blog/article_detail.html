@@ -1,53 +1,314 @@
+{% extends "blog/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<!-- header -->
-{% include "blog/header.html" %}
+{% load mptt_tags %}
 
-<!-- 导航栏 -->
-{% include "blog/navbar.html" %}
-<link rel="stylesheet" href="{% static 'blog/css/code.css' %}" >
-<body>
-
-<main class="container mt-4">
-    <article>
-        <h1>{{ article.title }}</h1>
-        <p><small>发表于 {{ article.published_date }}</small></p>
-        <div class="content">
+{% block content %}
+<div class="container mt-4">
+    <!-- 文章内容部分 -->
+    <article class="mb-5">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta text-muted mb-4">
+            <small>发表于 {{ article.published_date }}</small>
+        </div>
+        <div class="article-content">
             {{ article.content|safe }}
         </div>
     </article>
-</main>
 
- {% include "blog/footer.html" %}
+    <!-- 评论区 -->
+    <div class="comments-section">
+        <h3 class="comments-title mb-4">评论区</h3>
+        
+        {% if user.is_authenticated %}
+        <div class="comment-form-container mb-5">
+            <form id="commentForm" class="comment-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea 
+                        class="form-control" 
+                        id="commentContent" 
+                        rows="3" 
+                        placeholder="写下你的评论..."
+                    ></textarea>
+                </div>
+                <input type="hidden" id="parentId" value="">
+                <button type="submit" class="btn btn-primary">发表评论</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            请<a href="{% url 'users:login' %}" class="alert-link">登录</a>后发表评论
+        </div>
+        {% endif %}
 
-    <script src="{% static 'blog/js/jquery-3.5.1.slim.min.js' %}"></script>
-    <script src="{% static 'blog/js/popper.min.js' %}"></script>
-    <script src="{% static 'bootstrap/4.5.3/js/bootstrap.min.js' %}"></script>
+        <!-- 评论列表 -->
+        <div class="comment-list">
+            {% recursetree comments %}
+            <div class="comment-item {% if node.level > 0 %}comment-reply{% endif %}" 
+                 data-id="{{ node.id }}" 
+                 style="margin-left: {{ node.level }}em;">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            {% if node.user.profile.avatar %}
+                                <img src="{{ node.user.profile.avatar.url }}" alt="avatar" class="avatar">
+                            {% else %}
+                                <img src="{% static 'img/default-avatar.png' %}" alt="avatar" class="avatar">
+                            {% endif %}
+                            <span class="username">{{ node.user.username }}</span>
+                        </div>
+                        <small class="comment-time text-muted">{{ node.created_time|date:"Y-m-d H:i" }}</small>
+                    </div>
+                    
+                    <div class="comment-body">
+                        {% if node.parent %}
+                        <div class="reply-to">
+                            回复 <span class="reply-username">@{{ node.parent.user.username }}</span>
+                        </div>
+                        {% endif %}
+                        <p class="comment-text">{{ node.content }}</p>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                    <div class="comment-actions">
+                        <button class="btn btn-sm btn-link reply-btn" data-id="{{ node.id }}">
+                            <i class="fas fa-reply"></i> 回复
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if not node.is_leaf_node %}
+                <div class="children">
+                    {{ children }}
+                </div>
+                {% endif %}
+            </div>
+            {% endrecursetree %}
+        </div>
+    </div>
+</div>
+{% endblock %}
 
+{% block extra_css %}
+<style>
+/* 评论区整体样式 */
+.comments-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
 
-</body>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    showProcessingMessages: false, //关闭js加载过程信息
-    messageStyle: "none", //不显示信息
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-        inlineMath:  [ ["$", "$"] ], //行内公式选择$
-        displayMath: [ ["$$","$$"] ], //段内公式选择$$
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], //避开某些标签
-        ignoreClass:"comment-content" //避开含该Class的标签
-    },
-    "HTML-CSS": {
-        availableFonts: ["STIX","TeX"], //可选字体
-        showMathMenu: false //关闭右击菜单显示
+.comments-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* 评论表单样式 */
+.comment-form-container {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.comment-form textarea {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 100px;
+    font-size: 0.95rem;
+}
+
+.comment-form textarea:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* 评论列表样式 */
+.comment-list {
+    margin-top: 2rem;
+}
+
+.comment-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.comment-reply {
+    margin-left: 2rem;
+    border-left: 3px solid #007bff;
+}
+
+/* 评论头部样式 */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-user {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.username {
+    font-weight: 500;
+    color: #333;
+}
+
+.comment-time {
+    font-size: 0.85rem;
+}
+
+/* 评论内容样式 */
+.comment-body {
+    margin: 0.5rem 0;
+}
+
+.reply-to {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.reply-username {
+    color: #007bff;
+    font-weight: 500;
+}
+
+.comment-text {
+    margin: 0;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* 评论操作样式 */
+.comment-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reply-btn {
+    color: #6c757d;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.reply-btn:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .comment-reply {
+        margin-left: 1rem;
     }
+    
+    .comment-item {
+        padding: 0.75rem;
+    }
+    
+    .avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .username {
+        font-size: 0.9rem;
+    }
+}
+
+/* 动画效果 */
+.comment-item {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Font Awesome 图标 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+$(document).ready(function() {
+    // 回复按钮点击事件
+    $('.reply-btn').click(function() {
+        const commentId = $(this).data('id');
+        $('#parentId').val(commentId);
+        $('#commentContent').focus();
+        $('html, body').animate({
+            scrollTop: $('#commentForm').offset().top
+        }, 500);
+    });
+
+    // 提交评论
+    $('#commentForm').submit(function(e) {
+        e.preventDefault();
+        const content = $('#commentContent').val();
+        const parentId = $('#parentId').val();
+        
+        console.log('提交评论:', {
+            content: content,
+            parentId: parentId,
+            articleId: '{{ article.id }}'
+        });
+
+        $.ajax({
+            url: '{% url "article:post_comment" article.id %}',
+            type: 'POST',
+            data: {
+                content: content,
+                parent_id: parentId,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                console.log('评论提交成功:', response);
+                if (response.status === 'success') {
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('评论提交失败:', error);
+                console.error('状态码:', xhr.status);
+                console.error('响应文本:', xhr.responseText);
+                alert('评论提交失败，请稍后重试');
+            }
+        });
+    });
 });
-MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-
 </script>
-
-<script src="{% static 'blog/js/MathJax.js' %}"></script>
-{#<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>#}
-</html>
+{% endblock %}

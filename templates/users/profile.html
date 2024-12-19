@@ -1,0 +1,242 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card profile-card">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- 左侧头像部分 -->
+                        <div class="col-md-4 text-center">
+                            <div class="avatar-wrapper">
+                                <div class="avatar-preview">
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" id="avatar-preview" class="profile-avatar" alt="用户头像">
+                                    {% else %}
+                                        <img src="{% static 'img/default-avatar.png' %}" id="avatar-preview" class="profile-avatar" alt="默认头像">
+                                    {% endif %}
+                                </div>
+                                <div class="avatar-edit">
+                                    <label for="{{ form.avatar.id_for_label }}" class="btn btn-light btn-sm mt-3">
+                                        <i class="fas fa-camera"></i> 更换头像
+                                    </label>
+                                    <input type="file" 
+                                           class="d-none" 
+                                           id="{{ form.avatar.id_for_label }}" 
+                                           name="{{ form.avatar.name }}"
+                                           accept="image/*">
+                                </div>
+                            </div>
+                            <h5 class="mt-3">{{ user.username }}</h5>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+
+                        <!-- 右侧表单部分 -->
+                        <div class="col-md-8">
+                            <h4 class="mb-4">编辑个人资料</h4>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">个人简介</label>
+                                    <div class="col-sm-9">
+                                        {{ form.bio|addclass:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">个人网站</label>
+                                    <div class="col-sm-9">
+                                        {{ form.website|addclass:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> 保存更改
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* 卡片样式 */
+.profile-card {
+    border: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border-radius: 15px;
+}
+
+/* 头像样式 */
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-preview {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.avatar-preview:hover {
+    box-shadow: 0 0 25px rgba(0,0,0,0.2);
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.avatar-preview:hover .profile-avatar {
+    transform: scale(1.05);
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.col-form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+/* 按钮样式 */
+.btn-primary {
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+}
+
+.btn-light {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.btn-light:hover {
+    background: #e9ecef;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .avatar-preview {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .col-form-label {
+        text-align: left;
+        margin-bottom: 0.5rem;
+    }
+    
+    .offset-sm-3 {
+        margin-left: 0;
+    }
+    
+    .btn-primary {
+        width: 100%;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-card {
+    animation: fadeIn 0.5s ease;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // 头像预览
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $('#avatar-preview').attr('src', e.target.result);
+                
+                // 添加动画效果
+                $('#avatar-preview').css('opacity', '0');
+                setTimeout(function() {
+                    $('#avatar-preview').css('opacity', '1');
+                }, 50);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // 监听文件输入变化
+    $("#{{ form.avatar.id_for_label }}").change(function() {
+        readURL(this);
+    });
+
+    // 表单验证
+    $('form').on('submit', function(e) {
+        var bio = $('#id_bio').val();
+        var website = $('#id_website').val();
+        
+        if (website && !website.match(/^https?:\/\/.+\..+$/)) {
+            e.preventDefault();
+            alert('请输入有效的网站地址，需要包含 http:// 或 https://');
+            return false;
+        }
+    });
+});
+</script>
+{% endblock %} 

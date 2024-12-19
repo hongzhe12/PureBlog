@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'mptt',
     'simpleui',
     'mdeditor',
     'article.apps.ArticleConfig',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -202,5 +204,10 @@ ALLOWED_ORIGINS = ['http://47.113.186.186:8000','http://47.113.186.186','http://
 CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # 强制使用https协议
+
+# 添加登录相关配置
+LOGIN_REDIRECT_URL = '/'  # 登录成功后重定向到首页
+LOGOUT_REDIRECT_URL = '/'  # 登出后重定向到首页
+LOGIN_URL = '/users/login/'  # 登录页面的URL
 
 

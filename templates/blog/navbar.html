@@ -13,6 +13,23 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'article:about' %}">关于</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'article:contact' %}">联系</a></li>
             </ul>
+            <div class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                            {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="{% url 'users:profile' %}">个人资料</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'users:logout' %}">退出登录</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a class="nav-item nav-link" href="{% url 'users:login' %}">登录</a>
+                    <a class="nav-item nav-link" href="{% url 'users:register' %}">注册</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 </header>
