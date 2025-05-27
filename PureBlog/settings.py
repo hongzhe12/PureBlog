@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--jf5@)96zkz3arz#5(-^%t5cq-q0udrnxw!8dil5f!#%tdsbq%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -75,7 +75,6 @@ WSGI_APPLICATION = 'PureBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
 if DEBUG:
     DATABASES = {
         'default': {
@@ -83,18 +82,24 @@ if DEBUG:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 else:
+    # termunx
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['POSTGRES_DB'],
-            'HOST': 'postgres',
-            'PORT': 5432,
-            'USER': os.environ['POSTGRES_USER'],
-            'PASSWORD': os.environ['POSTGRES_PASSWORD']
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql',
+    #         'NAME': os.environ['POSTGRES_DB'],
+    #         'HOST': 'postgres',
+    #         'PORT': 5432,
+    #         'USER': os.environ['POSTGRES_USER'],
+    #         'PASSWORD': os.environ['POSTGRES_PASSWORD']
+    #     }
+    # }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -150,7 +155,6 @@ if DEBUG:
     测试开发模式下静态文件访问：http://127.0.0.1:8000/static/img/sunset.png
     测试开发模式下媒体文件访问：http://127.0.0.1:8000/media/img/sunset.png
     '''
-
 else:
     # 生产模式下文件服务配置
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
