@@ -1,22 +1,28 @@
+{% load static %}
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- 统一品牌链接，可以根据当前页面动态设定 -->
-        <a class="navbar-brand" href="{% url 'article:home' %}">首页</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <!-- Logo 或品牌名称 -->
+        <a class="navbar-brand font-weight-bold" href="{% url 'article:home' %}">首页</a>
+        <!-- 响应式菜单按钮 -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- 导航内容 -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- 主要导航项，包含通用链接 -->
             <ul class="navbar-nav mr-auto">
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'article:home' %}">首页</a></li>#}
-                <li class="nav-item"><a class="nav-link" href="{% url 'article:about' %}">关于</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'article:contact' %}">联系</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'article:about' %}">关于</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'article:contact' %}">联系</a>
+                </li>
             </ul>
-            <div class="navbar-nav ml-auto">
+            <!-- 用户操作 -->
+            <div class="navbar-nav ml-auto align-items-center">
                 {% if user.is_authenticated %}
                     <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                            <span class="user-avatar mr-2" style="background-image: url('{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}');"></span>
                             {{ user.username }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -26,10 +32,61 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="nav-item nav-link" href="{% url 'users:login' %}">登录</a>
-                    <a class="nav-item nav-link" href="{% url 'users:register' %}">注册</a>
+                    <a class="nav-item nav-link btn btn-outline-primary px-3 mr-2" href="{% url 'users:login' %}">登录</a>
+                    <a class="nav-item nav-link btn btn-primary px-3 text-white" href="{% url 'users:register' %}">注册</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 </header>
+<style>
+    /* 样式美化 */
+.navbar {
+    padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.navbar-brand:hover {
+    color: #007BFF;
+}
+
+.nav-link {
+    font-size: 1rem;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #007BFF;
+}
+
+.nav-item .btn {
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.nav-item .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* 用户头像样式 */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.user-avatar:hover {
+    border-color: #007BFF;
+}
+
+</style>

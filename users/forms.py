@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
+
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         label='用户名',
@@ -50,14 +51,16 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '用户名'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '密码'})) 
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '密码'}))
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio', 'website']
+        fields = ['avatar', 'bio', 'website']  # 正确应包含 'avatar'
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4}),
             'website': forms.URLInput(attrs={'placeholder': 'https://'}),

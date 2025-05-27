@@ -68,6 +68,7 @@
                         {% endif %}
                         <p class="comment-text">{{ node.content }}</p>
                     </div>
+
                     
                     {% if user.is_authenticated %}
                     <div class="comment-actions">
@@ -259,31 +260,61 @@
 
 {% block extra_js %}
 <!-- Font Awesome 图标 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'blog/css/all.min.css' %}" >
+
 
 <script>
 $(document).ready(function() {
     // 回复按钮点击事件
     $('.reply-btn').click(function() {
-        const commentId = $(this).data('id');
+        const $this = $(this);
+        const commentId = $this.data('id');
+        const targetUsername = $this.closest('.comment-item').find('.username').text().trim() || '用户'; // 获取回复目标用户名
+
+        // 设置回复状态
         $('#parentId').val(commentId);
-        $('#commentContent').focus();
+        $('#commentContent')
+            .val('') // 清空输入框
+            .attr('placeholder', `回复 @${targetUsername}...`) // 设置带用户名的占位符
+            .focus(); // 聚焦输入框
+
+        // 平滑滚动到评论表单（偏移导航栏高度，避免遮挡）
+        const navHeight = $('.navbar').outerHeight() || 50; // 获取导航栏高度
         $('html, body').animate({
-            scrollTop: $('#commentForm').offset().top
-        }, 500);
+            scrollTop: $('#commentForm').offset().top - navHeight
+        }, 300);
     });
 
-    // 提交评论
+    // 取消回复功能（点击空白处或清除父级ID）
+    $(document).click(function(event) {
+        if (!$(event.target).closest('.reply-btn, #commentContent, .comment-form').length) {
+            $('#parentId').val('');
+            $('#commentContent')
+                .attr('placeholder', '写下你的评论...') // 恢复默认占位符
+                .val(''); // 清空输入内容
+        }
+    });
+
+    // 评论提交处理
     $('#commentForm').submit(function(e) {
         e.preventDefault();
-        const content = $('#commentContent').val();
+        const $form = $(this);
+        const content = $('#commentContent').val().trim();
         const parentId = $('#parentId').val();
-        
-        console.log('提交评论:', {
-            content: content,
-            parentId: parentId,
-            articleId: '{{ article.id }}'
-        });
+        const articleId = '{{ article.id }}';
+
+        // 输入内容验证
+        if (content === '') {
+            alert('评论内容不能为空');
+            $('#commentContent').focus();
+            return;
+        }
+
+        // 显示加载状态（可选）
+        const originalButtonText = $form.find('button').text();
+        $form.find('button')
+            .text('提交中...')
+            .prop('disabled', true);
 
         $.ajax({
             url: '{% url "article:post_comment" article.id %}',
@@ -296,16 +327,33 @@ $(document).ready(function() {
             success: function(response) {
                 console.log('评论提交成功:', response);
                 if (response.status === 'success') {
-                    location.reload();
+                    // 滚动到最新评论（需根据实际情况调整选择器）
+                    const newCommentSelector = `.comment-item[data-id="${response.data.id}"]`;
+                    if ($(newCommentSelector).length) {
+                        $('html, body').animate({
+                            scrollTop: $(newCommentSelector).offset().top - navHeight
+                        }, 300);
+                    } else {
+                        location.reload(); // 若未找到新评论，刷新页面
+                    }
+                    // 清空输入框并恢复默认状态
+                    $('#commentContent')
+                        .val('')
+                        .attr('placeholder', '写下你的评论...');
+                    $('#parentId').val('');
                 } else {
                     alert(response.message);
                 }
             },
             error: function(xhr, status, error) {
                 console.error('评论提交失败:', error);
-                console.error('状态码:', xhr.status);
-                console.error('响应文本:', xhr.responseText);
                 alert('评论提交失败，请稍后重试');
+            },
+            complete: function() {
+                // 恢复按钮状态
+                $form.find('button')
+                    .text(originalButtonText)
+                    .prop('disabled', false);
             }
         });
     });

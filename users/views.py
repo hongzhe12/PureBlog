@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProfileUpdateForm
 
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -15,6 +16,7 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -29,15 +31,18 @@ def user_login(request):
         form = CustomAuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
 
+
 @login_required
 def user_logout(request):
     logout(request)
     messages.success(request, '已成功登出！')
     return redirect('users:login')
 
+
 @login_required
 def profile(request):
     if request.method == 'POST':
+        print("request.FILES:", request.FILES)  # 打印文件上传数据
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
@@ -45,5 +50,6 @@ def profile(request):
             return redirect('users:profile')
     else:
         form = ProfileUpdateForm(instance=request.user.profile)
-    
+
     return render(request, 'users/profile.html', {'form': form})
+
