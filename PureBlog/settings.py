@@ -200,8 +200,16 @@ LOGGING = {
 
 # 跨域的配置
 # SIMPLEUI_LOGO = 'https://pythond.cn/static/logo/logo.jpg'
-ALLOWED_ORIGINS = ['http://47.113.186.186:8000','http://47.113.186.186','http://127.0.0.1','http://127.0.0.1:8000'] # 允许跨域的源
-CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
+ALLOWED_ORIGINS = ['http://47.113.186.186:8000', 'http://47.113.186.186', 'http://127.0.0.1',
+                   'http://127.0.0.1:8000']  # 允许跨域的源
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://localhost:8000",  # 若前端运行在非默认端口
+    "http://192.168.1.100:3000",  # 本地局域网IP（如前端跨端口访问）
+]
+print("放行名单:", CSRF_TRUSTED_ORIGINS)
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # 强制使用https协议
 
@@ -209,5 +217,3 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # 强制使用htt
 LOGIN_REDIRECT_URL = '/'  # 登录成功后重定向到首页
 LOGOUT_REDIRECT_URL = '/'  # 登出后重定向到首页
 LOGIN_URL = '/users/login/'  # 登录页面的URL
-
-
